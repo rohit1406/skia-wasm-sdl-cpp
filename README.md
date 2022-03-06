@@ -51,8 +51,10 @@ You can now open hello.html from out folder in a web browser.
 
 Unfortunately several browsers (including Chrome, Safari, and Internet Explorer) do not support file:// XHR requests, and can’t load extra files needed by the HTML (like a .wasm file, or packaged file data as mentioned lower down). For these browsers you’ll need to serve the files using a local webserver and then open http://localhost:8000/out/hello_world.html).
 
-For this, type below python command 
+For this, 
+type below python command in command prompt: 
 	python -m http.server
+	
 and then open the file from browser using 
 	http://localhost:8000/out/hello_world.html
 	
@@ -77,3 +79,11 @@ The hello_world_sdl_with_logging.cpp example shows how to load a file (both the 
 	emcc ./src/hello_world_sdl_with_logging.cpp -o ./out/hello_world_sdl_with_logging.html --preload-file ./log.txt
 
 
+#----------------------------------------------------
+
+# Canvas via Embind
+hello_world_translated_javascript_with_embind.cpp shows how javascript code in index_with_canvas.html can be transliterated to C++ with Embind.
+
+When linking this code, make sure to pass --bind to enable Embind:
+
+	emcc --bind ./src/hello_world_translated_javascript_with_embind.cpp -o ./out/hello_world_translated_javascript_with_embind.html
