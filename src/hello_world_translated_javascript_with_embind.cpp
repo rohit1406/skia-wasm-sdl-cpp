@@ -16,6 +16,8 @@ thread_local const val document = val::global("document");
 int main() {
 	// C-string val conversion is explicit in val.h so we need to pass val(***) like string as a second argument in below functino calls
 	val canvas = document.call<val>("getElementById", val("canvas"));
+	canvas.set("width", val("800"));
+	canvas.set("height", val("600"));
 	val ctx = canvas.call<val>("getContext", val("2d"));
 	ctx.set("fillStyle", "green");
 	ctx.call<void>("fillRect", 10, 10, 800, 600);
