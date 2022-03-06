@@ -87,3 +87,11 @@ hello_world_translated_javascript_with_embind.cpp shows how javascript code in i
 When linking this code, make sure to pass --bind to enable Embind:
 
 	emcc --bind ./src/hello_world_translated_javascript_with_embind.cpp -o ./out/hello_world_translated_javascript_with_embind.html
+	
+	
+	
+# Choosing the canvas element
+custom_hello_world_translated_javascript_with_embind.html is created to demonstrate how we can choose between the canvas elements. 
+In this example, the canvas is created in our own html file and is used in the cpp file which renders the green square.
+
+The above html file uses the js and wasm files generated when compiled ./src/hello_world_translated_javascript_with_embind.cpp cpp file.
