@@ -125,5 +125,16 @@ With this, Since all the control flow changes are manual and reflected in the so
 	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2
 	
 
+# Drawing other shapes with SDL2_gfx
+SDL2 abstracts away cross-platform differences and various types of media devices in a single API, but it's still a pretty low-level library. In particular for graphics, while it provides APIs for drawing points, lines and rectangles, implementation of any more complex shapes and transformations is left to the user.
+
+SDL2_gfx is a separate library that fills that gap. For example, it can be used to replace a rectangle in the example above with a circle.
+
+Now the SDL2_gfx library also needs to be linked into the application. It's done similarly to SDL2.
+	
+	* Native version
+	$ clang ./src/hello_world_sdl2.cpp -o hello_world_sdl2 -lSDL2 -lSDL2_gfx
+	* Web version
+	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2 -s USE_SDL_GFX=2
 
 

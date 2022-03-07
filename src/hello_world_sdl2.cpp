@@ -4,6 +4,7 @@
 */
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif // __EMSCRIPTEN__
@@ -12,15 +13,16 @@
 SDL_Window* window;
 SDL_Renderer* renderer;
 
-SDL_Rect rect = { .x = 10, .y = 10, .w = 150, .h = 100 };
+SDL_Point center = { .x = 100, .y = 100 };
+const int radius = 100;
 
 uint32_t ticksForNextKeyDown = 0;
 
 void redraw() {
 	SDL_SetRenderDrawColor(renderer, /* RGBA: black */ 0x00, 0x00, 0x00, 0xFF);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, /* RGBA: green */ 0x00, 0x80, 0x00, 0xFF);
-	SDL_RenderFillRect(renderer, &rect);
+	filledCircleRGBA(renderer, center.x, center.y, radius,
+		/* RGBA: green */ 0x00, 0x80, 0x00, 0xFF);
 	SDL_RenderPresent(renderer);
 }
 
@@ -39,16 +41,16 @@ bool handle_events() {
 			ticksForNextKeyDown = ticksNow + 10;
 			switch (event.key.keysym.sym) {
 			case SDLK_UP:
-				rect.y -= 1;
+				center.y -= 1;
 				break;
 			case SDLK_DOWN:
-				rect.y += 1;
+				center.y += 1;
 				break;
 			case SDLK_RIGHT:
-				rect.x += 1;
+				center.x += 1;
 				break;
 			case SDLK_LEFT:
-				rect.x -= 1;
+				center.x -= 1;
 				break;
 			}
 			redraw();
