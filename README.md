@@ -79,7 +79,7 @@ The hello_world_sdl_with_logging.cpp example shows how to load a file (both the 
 	emcc ./src/hello_world_sdl_with_logging.cpp -o ./out/hello_world_sdl_with_logging.html --preload-file ./log.txt
 
 
-#----------------------------------------------------
+# ----------------------------------------------------
 
 # Canvas via Embind
 hello_world_translated_javascript_with_embind.cpp shows how javascript code in index_with_canvas.html can be transliterated to C++ with Embind.
@@ -95,3 +95,35 @@ custom_hello_world_translated_javascript_with_embind.html is created to demonstr
 In this example, the canvas is created in our own html file and is used in the cpp file which renders the green square.
 
 The above html file uses the js and wasm files generated when compiled ./src/hello_world_translated_javascript_with_embind.cpp cpp file.
+
+# ----------------------------------------------------
+
+# Using SDL2 for rendering
+All the features - controlling audio, keyboard, mouse and graphics - have been ported and work with Emscripten on the web too so you can port entire games built with SDL2 without much hassle.
+
+Drawing a rectangle:
+
+For simplicity, I'll focus on a single-file case and translate the earlier rectangle example to SDL2.
+
+When linking with Emscripten, you need to use -s USE_SDL=2. This will tell Emscripten to fetch the SDL2 library, already precompiled to WebAssembly, and link it with your main application.
+
+	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2
+	
+# Unblocking event loop with Asyncify or with "main loop" APIs
+Asyncify is an Emscripten feature that allows to "pause" the C or C++ program, give control back to the event loop, and wake up the program when some asynchronous operation has finished.
+
+Such asynchronous operation can be even "sleep for the minimum possible time", expressed via emscripten_sleep(0) API. By embedding it in the middle of the loop, I can ensure that the control is returned to browser's event loop on each iteration, and the page remains responsive and can handle any events.
+
+The code now needs to be compiled with Asyncify enabled.
+
+	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2 -s ASYNCIFY
+	
+However, Asyncify can have non-trivial code size overhead. If it's only used for a top-level event loop in the application, a better option can be to use the emscripten_set_main_loop function.
+
+With this, Since all the control flow changes are manual and reflected in the source code, it can be compiled without the Asyncify feature again.
+
+	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2
+	
+
+
+
