@@ -87,8 +87,9 @@ static void throw_sdl_error() {
 
 SdlApp::SdlApp()
 {
+	printf("EMSC:: Initializing SdlApp\n");
 	uint32_t windowFlags = 0;
-
+	printf("EMSC:: Setting window attributes\n");
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
@@ -119,15 +120,36 @@ SdlApp::SdlApp()
 	/*
 	 * In a real application you might want to initialize more subsystems
 	 */
+	printf("EMSC:: Initializing SDL with SDL_INIT_VIDEO | SDL_INIT_EVENTS\n");
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
 		throw_sdl_error();
 
 	// Setup window
 	// This code will create a window with the half the resolution as the user's desktop.
+	printf("EMSC:: Getting display mode\n");
+	// Declare display mode structure to be filled in.
 	SDL_DisplayMode displayMode;
-	if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0)
-		throw_sdl_error();
 
+	SDL_Init(SDL_INIT_VIDEO);
+
+	// Get current display mode of all displays.
+	for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i) {
+
+		int should_be_zero = SDL_GetCurrentDisplayMode(i, &displayMode);
+
+		if (should_be_zero != 0) {
+			// In case of error...
+			SDL_Log("Could not get display mode for video display #%d: %s", i, SDL_GetError());
+			throw_sdl_error();
+		}
+		else{
+			// On success, print the current display mode.
+			SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", i, displayMode.w, displayMode.h, displayMode.refresh_rate);
+		}
+	}
+	//if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0)
+		//throw_sdl_error();
+	printf("EMSC:: Creating Window using SDL\n");
 	window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, displayMode.w / 2, displayMode.h / 2, windowFlags);
 
@@ -138,29 +160,33 @@ SdlApp::SdlApp()
 	// SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
 	// try and setup a GL context
+	printf("EMSC:: Creating a GL Context\n");
 	glContext = SDL_GL_CreateContext(window);
 	if (!glContext)
 		throw_sdl_error();
 
+	printf("EMSC:: Making above created GL context as current context\n");
 	auto success = SDL_GL_MakeCurrent(window, glContext);
 	if (success != 0)
 		throw_sdl_error();
-
+	printf("EMSC:: Getting Drawable size\n");
 	SDL_GL_GetDrawableSize(window, &viewWidth, &viewHeight);
-  printf("View size = %d x %d\n", viewWidth, viewHeight);
+	printf("EMSC:: View size = %d x %d\n", viewWidth, viewHeight);
 }
 
 SdlApp::~SdlApp()
 {
+	printf("EMSC:: Cleaning GL Context\n");
 	if (glContext) {
 		SDL_GL_DeleteContext(glContext);
 	}
-
+	printf("EMSC:: Destroying window\n");
 	//Destroy window
 	SDL_DestroyWindow(window);
-
+	printf("EMSC:: Quitting SDL subsystems\n");
 	//Quit SDL subsystems
 	SDL_Quit();
+	printf("EMSC:: Cleaning Done in SdlApp\n");
 }
 
 void SkiaApp::run()
@@ -180,7 +206,6 @@ void SkiaApp::update()
 	handle_events();
 
 	paint.setColor(SK_ColorBLACK);
-
 	canvas->drawString(helpMessage, 100.0f, 100.0f, font, paint);
 
 	SkRandom rand;
@@ -262,21 +287,25 @@ static SkPath create_star() {
 
 SkiaApp::SkiaApp()
 {
+	printf("EMSC:: Setting viewport\n");
   glViewport(0, 0, viewWidth, viewHeight);
 	glClearColor(1, 1, 1, 1);
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+	printf("EMSC:: Cleared color, stencil, and depth and stencil buffer bits in SkiaApp initialization\n");
 	// setup GrContext
+	printf("EMSC:: Getting GrGLMakeNativeInterface for Setting up GrContext\n");
 	const auto interface = GrGLMakeNativeInterface();
   assert(interface);
 
 	// setup contexts
+  printf("EMSC:: Setting up GrContext\n");
 	grContext = GrDirectContext::MakeGL(interface);
 	assert(grContext);
 
   // Wrap the frame buffer object attached to the screen in a Skia render target so Skia can
 	// render to it
+	printf("EMSC:: Wrapping up the frame buffer object attached to the screen in a Skia render target so Skia can render to it\n");
 	GrGLint buffer;
 	GR_GL_GetIntegerv(interface.get(), GR_GL_FRAMEBUFFER_BINDING, &buffer);
 	GrGLFramebufferInfo info;
@@ -310,19 +339,22 @@ SkiaApp::SkiaApp()
 	}
 #endif
 
+	printf("EMSC:: Creating GrBackendRenderTarget\n");
   GrBackendRenderTarget target(viewWidth, viewHeight, kMsaaSampleCount, kStencilBits, info);
 
 	// setup SkSurface
+	printf("EMSC:: Setting up SkSurface\n");
 	// To use distance field text, use commented out SkSurfaceProps instead
 	// SkSurfaceProps props(SkSurfaceProps::kUseDeviceIndependentFonts_Flag,
 	// 	SkSurfaceProps::kLegacyFontHost_InitType);
 	SkSurfaceProps props(SkSurfaceProps::kLegacyFontHost_InitType);
-
+	printf("EMSC:: Creating SkSurface from MakeFromBackendRenderTarget\n");
 	surface = SkSurface::MakeFromBackendRenderTarget(grContext.get(), target,
 		kBottomLeft_GrSurfaceOrigin,
 		colorType, nullptr, &props);
   assert(surface);
 
+  printf("EMSC:: Getting canvas from SkSurface\n");
   auto* canvas = surface->getCanvas();
   assert(canvas);
 	// canvas->scale((float)dw / displayMode.w, (float)dh / displayMode.h);
@@ -330,6 +362,7 @@ SkiaApp::SkiaApp()
 	paint.setAntiAlias(true);
 
 	// create a surface for CPU rasterization
+	printf("EMSC:: create a surface for CPU rasterization\n");
 	cpuSurface = SkSurface::MakeRaster(canvas->imageInfo());
   assert(cpuSurface);
 
@@ -344,15 +377,18 @@ SkiaApp::SkiaApp()
   image = cpuSurface->makeImageSnapshot();
   assert(image);
 
+  printf("EMSC:: Creating typeface for font rendering\n");
   typeface = SkTypeface::MakeFromData(
       SkData::MakeWithoutCopy(dataKarlaRegular, sizeof(dataKarlaRegular)));
 
   font.setTypeface(typeface);
 	font.setSize(24);
+	printf("EMSC:: App initialization is completed\n");
 }
 
 SkiaApp::~SkiaApp()
 {
+	printf("EMSC:: Cleaning Done in SkiaApp\n");
 }
 
 #if defined(SK_BUILD_FOR_ANDROID)

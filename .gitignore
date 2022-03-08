@@ -32,4 +32,6 @@
 *.app
 
 # Build output files
-# out
+/Demo/out/
+/Skia/out/
+/out/
