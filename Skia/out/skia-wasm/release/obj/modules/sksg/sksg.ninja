@@ -1,0 +1,36 @@
+defines = -DNDEBUG -DSK_GAMMA_APPLY_TO_A8 -DSK_GL -DSK_CODEC_DECODES_JPEG -DSK_ENCODE_JPEG -DSK_CODEC_DECODES_PNG -DSK_ENCODE_PNG -DSK_CODEC_DECODES_WEBP -DSK_HAS_WUFFS_LIBRARY -DSK_ASSUME_WEBGL=1
+framework_dirs =
+include_dirs = -I../../../../root/skia/modules/sksg/include -I../../../../root/skia
+cflags = -Werror -Wno-attributes -fstrict-aliasing -fPIC -fvisibility=hidden -O3 -fdata-sections -ffunction-sections -Wno-sign-conversion -Wno-unused-parameter -s WARN_UNALIGNED=1 -s MAIN_MODULE=1 -DSKNX_NO_SIMD -DSK_DISABLE_AAA -DSK_DISABLE_LEGACY_SHADERCONTEXT -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0
+cflags_cc = -std=c++17 -fvisibility-inlines-hidden -fno-exceptions -fno-rtti -frtti
+root_out_dir = .
+target_output_name = libsksg
+
+build obj/modules/sksg/src/libsksg.SkSGClipEffect.o: cxx ../../../../root/skia/modules/sksg/src/SkSGClipEffect.cpp
+build obj/modules/sksg/src/libsksg.SkSGColorFilter.o: cxx ../../../../root/skia/modules/sksg/src/SkSGColorFilter.cpp
+build obj/modules/sksg/src/libsksg.SkSGDraw.o: cxx ../../../../root/skia/modules/sksg/src/SkSGDraw.cpp
+build obj/modules/sksg/src/libsksg.SkSGEffectNode.o: cxx ../../../../root/skia/modules/sksg/src/SkSGEffectNode.cpp
+build obj/modules/sksg/src/libsksg.SkSGGeometryEffect.o: cxx ../../../../root/skia/modules/sksg/src/SkSGGeometryEffect.cpp
+build obj/modules/sksg/src/libsksg.SkSGGeometryNode.o: cxx ../../../../root/skia/modules/sksg/src/SkSGGeometryNode.cpp
+build obj/modules/sksg/src/libsksg.SkSGGradient.o: cxx ../../../../root/skia/modules/sksg/src/SkSGGradient.cpp
+build obj/modules/sksg/src/libsksg.SkSGGroup.o: cxx ../../../../root/skia/modules/sksg/src/SkSGGroup.cpp
+build obj/modules/sksg/src/libsksg.SkSGImage.o: cxx ../../../../root/skia/modules/sksg/src/SkSGImage.cpp
+build obj/modules/sksg/src/libsksg.SkSGInvalidationController.o: cxx ../../../../root/skia/modules/sksg/src/SkSGInvalidationController.cpp
+build obj/modules/sksg/src/libsksg.SkSGMaskEffect.o: cxx ../../../../root/skia/modules/sksg/src/SkSGMaskEffect.cpp
+build obj/modules/sksg/src/libsksg.SkSGMerge.o: cxx ../../../../root/skia/modules/sksg/src/SkSGMerge.cpp
+build obj/modules/sksg/src/libsksg.SkSGNode.o: cxx ../../../../root/skia/modules/sksg/src/SkSGNode.cpp
+build obj/modules/sksg/src/libsksg.SkSGOpacityEffect.o: cxx ../../../../root/skia/modules/sksg/src/SkSGOpacityEffect.cpp
+build obj/modules/sksg/src/libsksg.SkSGPaint.o: cxx ../../../../root/skia/modules/sksg/src/SkSGPaint.cpp
+build obj/modules/sksg/src/libsksg.SkSGPath.o: cxx ../../../../root/skia/modules/sksg/src/SkSGPath.cpp
+build obj/modules/sksg/src/libsksg.SkSGPlane.o: cxx ../../../../root/skia/modules/sksg/src/SkSGPlane.cpp
+build obj/modules/sksg/src/libsksg.SkSGRect.o: cxx ../../../../root/skia/modules/sksg/src/SkSGRect.cpp
+build obj/modules/sksg/src/libsksg.SkSGRenderEffect.o: cxx ../../../../root/skia/modules/sksg/src/SkSGRenderEffect.cpp
+build obj/modules/sksg/src/libsksg.SkSGRenderNode.o: cxx ../../../../root/skia/modules/sksg/src/SkSGRenderNode.cpp
+build obj/modules/sksg/src/libsksg.SkSGScene.o: cxx ../../../../root/skia/modules/sksg/src/SkSGScene.cpp
+build obj/modules/sksg/src/libsksg.SkSGText.o: cxx ../../../../root/skia/modules/sksg/src/SkSGText.cpp
+build obj/modules/sksg/src/libsksg.SkSGTransform.o: cxx ../../../../root/skia/modules/sksg/src/SkSGTransform.cpp
+
+build ./libsksg.a: alink obj/modules/sksg/src/libsksg.SkSGClipEffect.o obj/modules/sksg/src/libsksg.SkSGColorFilter.o obj/modules/sksg/src/libsksg.SkSGDraw.o obj/modules/sksg/src/libsksg.SkSGEffectNode.o obj/modules/sksg/src/libsksg.SkSGGeometryEffect.o obj/modules/sksg/src/libsksg.SkSGGeometryNode.o obj/modules/sksg/src/libsksg.SkSGGradient.o obj/modules/sksg/src/libsksg.SkSGGroup.o obj/modules/sksg/src/libsksg.SkSGImage.o obj/modules/sksg/src/libsksg.SkSGInvalidationController.o obj/modules/sksg/src/libsksg.SkSGMaskEffect.o obj/modules/sksg/src/libsksg.SkSGMerge.o obj/modules/sksg/src/libsksg.SkSGNode.o obj/modules/sksg/src/libsksg.SkSGOpacityEffect.o obj/modules/sksg/src/libsksg.SkSGPaint.o obj/modules/sksg/src/libsksg.SkSGPath.o obj/modules/sksg/src/libsksg.SkSGPlane.o obj/modules/sksg/src/libsksg.SkSGRect.o obj/modules/sksg/src/libsksg.SkSGRenderEffect.o obj/modules/sksg/src/libsksg.SkSGRenderNode.o obj/modules/sksg/src/libsksg.SkSGScene.o obj/modules/sksg/src/libsksg.SkSGText.o obj/modules/sksg/src/libsksg.SkSGTransform.o || ./libskia.a
+  arflags =
+  output_extension = .a
+  output_dir = 

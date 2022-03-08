@@ -1,0 +1,14 @@
+defines = -DWUFFS_IMPLEMENTATION -DWUFFS_CONFIG__MODULES -DWUFFS_CONFIG__MODULE__BASE -DWUFFS_CONFIG__MODULE__GIF -DWUFFS_CONFIG__MODULE__LZW -DNDEBUG
+framework_dirs =
+include_dirs =
+cflags = -w -Werror -Wno-attributes -fstrict-aliasing -fPIC -fvisibility=hidden -O3 -fdata-sections -ffunction-sections -Wno-sign-conversion -Wno-unused-parameter -s WARN_UNALIGNED=1 -s MAIN_MODULE=1 -DSKNX_NO_SIMD -DSK_DISABLE_AAA -DSK_DISABLE_LEGACY_SHADERCONTEXT -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0 -isystem /root/skia/third_party/externals/wuffs/release/c
+cflags_c =
+root_out_dir = .
+target_output_name = libwuffs
+
+build obj/third_party/externals/wuffs/release/c/libwuffs.wuffs-v0.3.o: cc ../../../../root/skia/third_party/externals/wuffs/release/c/wuffs-v0.3.c
+
+build ./libwuffs.a: alink obj/third_party/externals/wuffs/release/c/libwuffs.wuffs-v0.3.o
+  arflags =
+  output_extension = .a
+  output_dir = 

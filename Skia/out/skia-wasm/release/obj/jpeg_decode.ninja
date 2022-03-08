@@ -1,0 +1,13 @@
+defines = -DNDEBUG -DSK_ASSUME_WEBGL=1 -DSK_GAMMA_APPLY_TO_A8 -DSKIA_IMPLEMENTATION=1 -DSK_CODEC_DECODES_JPEG
+framework_dirs =
+include_dirs = -I../../../../root/skia
+cflags = -Werror -Wno-attributes -fstrict-aliasing -fPIC -fvisibility=hidden -O3 -fdata-sections -ffunction-sections -Wno-sign-conversion -Wno-unused-parameter -s WARN_UNALIGNED=1 -s MAIN_MODULE=1 -DSKNX_NO_SIMD -DSK_DISABLE_AAA -DSK_DISABLE_LEGACY_SHADERCONTEXT -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0 -isystem /root/skia/third_party/libjpeg-turbo -isystem /root/skia/third_party/externals/libjpeg-turbo
+cflags_cc = -std=c++17 -fvisibility-inlines-hidden -fno-exceptions -fno-rtti -frtti
+root_out_dir = .
+target_output_name = jpeg_decode
+
+build obj/src/codec/jpeg_decode.SkJpegCodec.o: cxx ../../../../root/skia/src/codec/SkJpegCodec.cpp
+build obj/src/codec/jpeg_decode.SkJpegDecoderMgr.o: cxx ../../../../root/skia/src/codec/SkJpegDecoderMgr.cpp
+build obj/src/codec/jpeg_decode.SkJpegUtility.o: cxx ../../../../root/skia/src/codec/SkJpegUtility.cpp
+
+build obj/jpeg_decode.stamp: stamp obj/src/codec/jpeg_decode.SkJpegCodec.o obj/src/codec/jpeg_decode.SkJpegDecoderMgr.o obj/src/codec/jpeg_decode.SkJpegUtility.o || ./libjpeg.a

@@ -1,0 +1,12 @@
+defines = -DNDEBUG -DSK_ASSUME_WEBGL=1 -DSK_GAMMA_APPLY_TO_A8 -DSKIA_IMPLEMENTATION=1 -DSK_FREETYPE_MINIMUM_RUNTIME_VERSION=\(\(\(FREETYPE_MAJOR\)\$ \<\<\$ 24\)\$ \|\$ \(\(FREETYPE_MINOR\)\$ \<\<\$ 16\)\$ \|\$ \(\(FREETYPE_PATCH\)\$ \<\<\$ 8\)\)
+framework_dirs =
+include_dirs = -I../../../../root/skia
+cflags = -Werror -Wno-attributes -fstrict-aliasing -fPIC -fvisibility=hidden -O3 -fdata-sections -ffunction-sections -Wno-sign-conversion -Wno-unused-parameter -s WARN_UNALIGNED=1 -s MAIN_MODULE=1 -DSKNX_NO_SIMD -DSK_DISABLE_AAA -DSK_DISABLE_LEGACY_SHADERCONTEXT -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0 -isystem /root/skia/third_party/externals/freetype/include
+cflags_cc = -std=c++17 -fvisibility-inlines-hidden -fno-exceptions -fno-rtti -frtti
+root_out_dir = .
+target_output_name = typeface_freetype
+
+build obj/src/ports/typeface_freetype.SkFontHost_FreeType.o: cxx ../../../../root/skia/src/ports/SkFontHost_FreeType.cpp
+build obj/src/ports/typeface_freetype.SkFontHost_FreeType_common.o: cxx ../../../../root/skia/src/ports/SkFontHost_FreeType_common.cpp
+
+build obj/typeface_freetype.stamp: stamp obj/src/ports/typeface_freetype.SkFontHost_FreeType.o obj/src/ports/typeface_freetype.SkFontHost_FreeType_common.o || ./libfreetype2.a ./libpng.a ./libzlib.a

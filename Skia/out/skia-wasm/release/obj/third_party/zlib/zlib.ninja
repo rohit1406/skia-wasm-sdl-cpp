@@ -1,0 +1,29 @@
+defines = -DZLIB_IMPLEMENTATION -DCPU_NO_SIMD -DNDEBUG
+framework_dirs =
+include_dirs =
+cflags = -w -Werror -Wno-attributes -fstrict-aliasing -fPIC -fvisibility=hidden -O3 -fdata-sections -ffunction-sections -Wno-sign-conversion -Wno-unused-parameter -s WARN_UNALIGNED=1 -s MAIN_MODULE=1 -DSKNX_NO_SIMD -DSK_DISABLE_AAA -DSK_DISABLE_LEGACY_SHADERCONTEXT -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0 -isystem /root/skia/third_party/externals/zlib
+cflags_c =
+root_out_dir = .
+target_output_name = libzlib
+
+build obj/third_party/externals/zlib/libzlib.adler32.o: cc ../../../../root/skia/third_party/externals/zlib/adler32.c
+build obj/third_party/externals/zlib/libzlib.compress.o: cc ../../../../root/skia/third_party/externals/zlib/compress.c
+build obj/third_party/externals/zlib/libzlib.cpu_features.o: cc ../../../../root/skia/third_party/externals/zlib/cpu_features.c
+build obj/third_party/externals/zlib/libzlib.crc32.o: cc ../../../../root/skia/third_party/externals/zlib/crc32.c
+build obj/third_party/externals/zlib/libzlib.deflate.o: cc ../../../../root/skia/third_party/externals/zlib/deflate.c
+build obj/third_party/externals/zlib/libzlib.gzclose.o: cc ../../../../root/skia/third_party/externals/zlib/gzclose.c
+build obj/third_party/externals/zlib/libzlib.gzlib.o: cc ../../../../root/skia/third_party/externals/zlib/gzlib.c
+build obj/third_party/externals/zlib/libzlib.gzread.o: cc ../../../../root/skia/third_party/externals/zlib/gzread.c
+build obj/third_party/externals/zlib/libzlib.gzwrite.o: cc ../../../../root/skia/third_party/externals/zlib/gzwrite.c
+build obj/third_party/externals/zlib/libzlib.infback.o: cc ../../../../root/skia/third_party/externals/zlib/infback.c
+build obj/third_party/externals/zlib/libzlib.inffast.o: cc ../../../../root/skia/third_party/externals/zlib/inffast.c
+build obj/third_party/externals/zlib/libzlib.inftrees.o: cc ../../../../root/skia/third_party/externals/zlib/inftrees.c
+build obj/third_party/externals/zlib/libzlib.trees.o: cc ../../../../root/skia/third_party/externals/zlib/trees.c
+build obj/third_party/externals/zlib/libzlib.uncompr.o: cc ../../../../root/skia/third_party/externals/zlib/uncompr.c
+build obj/third_party/externals/zlib/libzlib.zutil.o: cc ../../../../root/skia/third_party/externals/zlib/zutil.c
+build obj/third_party/externals/zlib/libzlib.inflate.o: cc ../../../../root/skia/third_party/externals/zlib/inflate.c
+
+build ./libzlib.a: alink obj/third_party/externals/zlib/libzlib.adler32.o obj/third_party/externals/zlib/libzlib.compress.o obj/third_party/externals/zlib/libzlib.cpu_features.o obj/third_party/externals/zlib/libzlib.crc32.o obj/third_party/externals/zlib/libzlib.deflate.o obj/third_party/externals/zlib/libzlib.gzclose.o obj/third_party/externals/zlib/libzlib.gzlib.o obj/third_party/externals/zlib/libzlib.gzread.o obj/third_party/externals/zlib/libzlib.gzwrite.o obj/third_party/externals/zlib/libzlib.infback.o obj/third_party/externals/zlib/libzlib.inffast.o obj/third_party/externals/zlib/libzlib.inftrees.o obj/third_party/externals/zlib/libzlib.trees.o obj/third_party/externals/zlib/libzlib.uncompr.o obj/third_party/externals/zlib/libzlib.zutil.o obj/third_party/externals/zlib/libzlib.inflate.o
+  arflags =
+  output_extension = .a
+  output_dir = 

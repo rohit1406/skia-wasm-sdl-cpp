@@ -1,0 +1,14 @@
+defines = -DNDEBUG
+framework_dirs =
+include_dirs =
+cflags = -w -Werror -Wno-attributes -fstrict-aliasing -fPIC -fvisibility=hidden -O3 -fdata-sections -ffunction-sections -Wno-sign-conversion -Wno-unused-parameter -s WARN_UNALIGNED=1 -s MAIN_MODULE=1 -DSKNX_NO_SIMD -DSK_DISABLE_AAA -DSK_DISABLE_LEGACY_SHADERCONTEXT -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0 -isystem /root/skia/third_party/externals/zlib/google -isystem /root/skia/third_party/externals/zlib
+cflags_cc = -std=c++17 -fvisibility-inlines-hidden -fno-exceptions -fno-rtti -frtti
+root_out_dir = .
+target_output_name = libcompression_utils_portable
+
+build obj/third_party/externals/zlib/google/libcompression_utils_portable.compression_utils_portable.o: cxx ../../../../root/skia/third_party/externals/zlib/google/compression_utils_portable.cc
+
+build ./libcompression_utils_portable.a: alink obj/third_party/externals/zlib/google/libcompression_utils_portable.compression_utils_portable.o || ./libzlib.a
+  arflags =
+  output_extension = .a
+  output_dir = 

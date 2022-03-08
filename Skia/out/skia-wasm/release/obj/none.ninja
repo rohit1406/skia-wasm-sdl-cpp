@@ -1,0 +1,8 @@
+defines = -DNDEBUG -DSK_ASSUME_WEBGL=1 -DSK_GAMMA_APPLY_TO_A8 -DSKIA_IMPLEMENTATION=1
+framework_dirs =
+include_dirs = -I../../../../root/skia
+root_out_dir = .
+target_output_name = none
+
+
+build obj/none.stamp: stamp
