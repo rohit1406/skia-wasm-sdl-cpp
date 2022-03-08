@@ -67,7 +67,8 @@ The HTML output isn’t limited just to just displaying text. You can also use t
 	emcc ./src/hello_world_sdl.cpp -o ./out/hello_world_sdl.html
 	
 	
-**Creating LOG file**
+**Creating LOG file:**
+
 Your C/C++ code can access files using the normal libc stdio API (fopen, fclose, etc.)
 
 JavaScript is usually run in the sandboxed environment of a web browser, without direct access to the local file system. Emscripten simulates a file system that you can access from your compiled C/C++ code using the normal libc stdio API.
@@ -81,7 +82,7 @@ The hello_world_sdl_with_logging.cpp example shows how to load a file (both the 
 
 # ----------------------------------------------------
 # Demo5:
-**Canvas via Embind**
+**Canvas via Embind:**
 hello_world_translated_javascript_with_embind.cpp shows how javascript code in index_with_canvas.html can be transliterated to C++ with Embind.
 
 When linking this code, make sure to pass --bind to enable Embind:
@@ -90,7 +91,8 @@ When linking this code, make sure to pass --bind to enable Embind:
 	
 	
 	
-**Choosing the canvas element**
+**Choosing the canvas element:**
+
 custom_hello_world_translated_javascript_with_embind.html is created to demonstrate how we can choose between the canvas elements. 
 In this example, the canvas is created in our own html file and is used in the cpp file which renders the green square.
 
@@ -98,7 +100,8 @@ The above html file uses the js and wasm files generated when compiled ./src/hel
 
 # ----------------------------------------------------
 # Demo6:
-**Using SDL2 for rendering**
+**Using SDL2 for rendering:**
+
 All the features - controlling audio, keyboard, mouse and graphics - have been ported and work with Emscripten on the web too so you can port entire games built with SDL2 without much hassle.
 
 Drawing a rectangle:
@@ -109,7 +112,8 @@ When linking with Emscripten, you need to use -s USE_SDL=2. This will tell Emscr
 
 	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2
 	
-**Unblocking event loop with Asyncify or with "main loop" APIs**
+**Unblocking event loop with Asyncify or with "main loop" APIs:**
+
 Asyncify is an Emscripten feature that allows to "pause" the C or C++ program, give control back to the event loop, and wake up the program when some asynchronous operation has finished.
 
 Such asynchronous operation can be even "sleep for the minimum possible time", expressed via emscripten_sleep(0) API. By embedding it in the middle of the loop, I can ensure that the control is returned to browser's event loop on each iteration, and the page remains responsive and can handle any events.
@@ -125,7 +129,8 @@ With this, Since all the control flow changes are manual and reflected in the so
 	emcc ./src/hello_world_sdl2.cpp -o ./out/hello_world_sdl2.html -s USE_SDL=2
 	
 
-**Drawing other shapes with SDL2_gfx**
+**Drawing other shapes with SDL2_gfx:**
+
 SDL2 abstracts away cross-platform differences and various types of media devices in a single API, but it's still a pretty low-level library. In particular for graphics, while it provides APIs for drawing points, lines and rectangles, implementation of any more complex shapes and transformations is left to the user.
 
 SDL2_gfx is a separate library that fills that gap. For example, it can be used to replace a rectangle in the example above with a circle.
@@ -140,6 +145,7 @@ Now the SDL2_gfx library also needs to be linked into the application. It's done
 # ----------------------------------------------------
 # Demo7:
 **Skia + SDL2 + Cpp + WASM Demo:**
+
 This demo is present in the Demo folder and uses files in Skia folder to build the skia library.
 When main.cpp is build and linking, the above skia library is used. The exact procedure to build this is as below:
 
