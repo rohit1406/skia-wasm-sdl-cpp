@@ -7,6 +7,7 @@
 
 #include "pch.h"
 #include "fonts.h"
+#include "include/struct_mapping/struct_mapping.h"
 
 #define S1(x) #x
 #define S2(x) S1(x)
@@ -49,6 +50,39 @@ protected:
 	int viewHeight = 0;
 };
 
+struct Gradient {
+	std::list<std::string> colors;
+	std::list<std::string> offsets;
+	int angle;
+	std::string direction;
+	std::string type;
+};
+
+struct Properties {
+	int x;
+	int y;
+	int width;
+	int height;
+};
+
+struct Shape {
+	std::string type;
+	Properties props;
+	std::string value;
+	int fontSize;
+	std::string fillColor;
+	std::string strokeColor;
+	int strokeWidth;
+	Gradient gradient;
+	int letterSpacing;
+	std::string fontFamily;
+	std::string fontWeight;
+};
+
+struct Elements {
+	std::list <Shape> elements;
+};
+
 class SkiaApp : public SdlApp {
 public:
 	SkiaApp();
@@ -56,8 +90,12 @@ public:
 
 	void run();
 	void update();
+	void initializeData();
+	void drawExperiments(SkCanvas* canvas);
 
 	static void update_callback(void* app);
+
+	
 
 private:
 	void handle_events();
@@ -77,6 +115,12 @@ private:
 	float rotation = 0;
 
 	bool fQuit = false;
+
+	// Json processing data
+	Elements elements;
+	std::string jsonFileName = "assets/sample_json.json";
+	std::string LBL_RECTANGLE= std::string("RECTANGLE");
+	std::string LBL_TEXT= std::string("TEXT");
 };
 
 static void throw_sdl_error() {
@@ -205,6 +249,10 @@ void SkiaApp::update()
 	canvas->clear(SK_ColorWHITE);
 	handle_events();
 
+
+	// draw experiments
+	drawExperiments(canvas);
+
 	paint.setColor(SK_ColorBLACK);
 	canvas->drawString(helpMessage, 100.0f, 100.0f, font, paint);
 
@@ -223,6 +271,36 @@ void SkiaApp::update()
 
 	canvas->flush();
 	SDL_GL_SwapWindow(window);
+}
+
+void SkiaApp::drawExperiments(SkCanvas* canvas) {
+	canvas->save();
+	
+	canvas->translate(SkIntToScalar(128), SkIntToScalar(128));
+	SkRect rect = SkRect::MakeXYWH(-90.5f, -90.5f, 181.0f, 181.0f);
+	SkPaint paint;
+	paint.setColor(SK_ColorBLUE);
+	canvas->drawRect(rect, paint);
+
+	SkPath path;
+	path.cubicTo(768, 0, -512, 256, 256, 256);
+	paint.setColor(SK_ColorGREEN);
+	canvas->drawPath(path, paint);
+
+	// rendering data from file
+	std::list <Shape> shapes = elements.elements;
+	for (Shape shape : shapes) {
+		if (LBL_RECTANGLE.compare(shape.type) == 0) {
+			SkRect rectFromFile = SkRect::MakeXYWH(shape.props.x, shape.props.y, shape.props.width, shape.props.height);
+			paint.setColor(SK_ColorYELLOW);
+			canvas->drawRect(rectFromFile, paint);
+		}else if (LBL_TEXT.compare(shape.type) == 0) {
+			paint.setColor(SK_ColorBLACK);
+			canvas->drawString(shape.value.c_str(), shape.props.x, shape.props.y, font, paint);
+		}
+	}
+
+	canvas->restore();
 }
 
 void SkiaApp::update_callback(void* app)
@@ -285,8 +363,120 @@ static SkPath create_star() {
 	return concavePath;
 }
 
+void SkiaApp::initializeData() {
+	printf("EMSC:: Initializing Data\n");
+	std::istringstream json_data(R"json(
+{"elements": [
+	{
+			"type": "RECTANGLE",
+			"props": {
+					"x": 25,
+					"y": 100,
+					"width": 200,
+					"height": 200
+			},
+			"fillColor": "none",
+			"strokeColor": "black",
+			"strokeWidth": 2,
+			"gradient": {
+                "colors": ["#9B0F02", "#FFFFFF"],
+                "offsets": ["30%", "90%"],
+                "angle": -1,
+                "direction": "",
+                "type": "linear"
+      }
+	},
+	{
+			"type": "TEXT",
+			"props": {
+					"x": 25,
+					"y": 25
+			},
+			"value": "World is beautiful!",
+			"fontSize": 25,
+			"fillColor": "#ff00ff",
+			"strokeColor": "none",
+			"strokeWidth": 0,
+			"gradient": null,
+			"letterSpacing": 1,
+			"fontFamily": "Lato",
+			"fontWeight": "Bold"
+	}
+]
+}
+)json");
+
+	std::string jsonDataFromFile;
+	std::ifstream is(jsonFileName, std::ios::binary);
+	printf("EMSC:: Reading data from file %s\n", jsonFileName.c_str());
+	if (is) {
+		printf("EMSC:: file %s is present so reading data from it\n", jsonFileName.c_str());
+		// get length of file:
+		is.seekg(0, std::ios::end);
+		long length = is.tellg();
+		is.seekg(0, std::ios::beg);
+		// allocate memory:
+		char* buffer = new char[length];
+		// read data as a block:
+		is.read(buffer, length);
+		// create string stream of memory contents
+		//std::istringstream iss(std::string(buffer));
+		jsonDataFromFile = std::string(buffer);
+		std::cout << buffer;
+		// delete temporary buffer
+		delete[] buffer;
+		// close filestream
+		is.close();
+	}
+	else {
+		printf("EMSC:: file %s is not present so reading hardcoded sample data from code\n", jsonFileName.c_str());
+		jsonDataFromFile = json_data.str();
+	}
+
+	// Mapping JSON root
+	printf("EMSC:: Mapping Json properties to Cpp structs\n");
+	struct_mapping::reg(&Elements::elements, "elements");
+	// Mapping Shapes properties
+	printf("EMSC:: Mapping Shapes properties\n");
+	struct_mapping::reg(&Shape::type, "type");
+	struct_mapping::reg(&Shape::value, "value");
+	struct_mapping::reg(&Shape::fontSize, "fontSize");
+	struct_mapping::reg(&Shape::fillColor, "fillColor");
+	struct_mapping::reg(&Shape::strokeColor, "strokeColor");
+	struct_mapping::reg(&Shape::strokeWidth, "strokeWidth");
+	struct_mapping::reg(&Shape::letterSpacing, "letterSpacing");
+	struct_mapping::reg(&Shape::fontFamily, "fontFamily");
+	struct_mapping::reg(&Shape::fontWeight, "fontWeight");
+	// Mapping objects in Shape struct
+	struct_mapping::reg(&Shape::props, "props");
+	struct_mapping::reg(&Shape::gradient, "gradient");
+
+	// Mapping Properties properties
+	printf("EMSC:: Mapping Properties properties\n");
+	struct_mapping::reg(&Properties::x, "x");
+	struct_mapping::reg(&Properties::y, "y");
+	struct_mapping::reg(&Properties::width, "width");
+	struct_mapping::reg(&Properties::height, "height");
+
+	// Mapping Gradient properties
+	printf("EMSC:: Mapping Gradient properties\n");
+	struct_mapping::reg(&Gradient::angle, "angle");
+	struct_mapping::reg(&Gradient::direction, "direction");
+	struct_mapping::reg(&Gradient::type, "type");
+	// Mapping collections in Gradient struct
+	struct_mapping::reg(&Gradient::colors, "colors");
+	struct_mapping::reg(&Gradient::offsets, "offsets");
+
+	printf("EMSC:: parsing json data struct\n");
+	std::istringstream streamjsonDataFromFile(jsonDataFromFile);
+	struct_mapping::map_json_to_struct(elements, streamjsonDataFromFile);
+	printf("EMSC:: parsing json data struct finished\n");
+	printf("EMSC:: Reading data from json - elements size is %lu\n", elements.elements.size());
+	printf("EMSC:: Data initialization completed\n");
+}
 SkiaApp::SkiaApp()
 {
+	initializeData();
 	printf("EMSC:: Setting viewport\n");
   glViewport(0, 0, viewWidth, viewHeight);
 	glClearColor(1, 1, 1, 1);
@@ -404,7 +594,7 @@ extern "C" int __cdecl main(int argc, char** argv) {
   // strategy.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
   // //emscripten_request_fullscreen_strategy("canvas", 1, &strategy);
   // emscripten_enter_soft_fullscreen("canvas", &strategy);
-
+	
 	SkiaApp app;
 	emscripten_set_main_loop_arg(SkiaApp::update_callback, &app, 0, true);
 #else
@@ -414,4 +604,20 @@ extern "C" int __cdecl main(int argc, char** argv) {
 #endif
 
 	return 0;
+}
+
+extern "C" {
+
+	int int_sqrt(int x) {
+		return sqrt(x);
+	}
+
+}
+
+void EMSCRIPTEN_KEEPALIVE clean_stuff() {
+	// Clean up the mess...
+	// You should use EMSCRIPTEN_KEEPALIVE or
+	// add it to EXPORTED_FUNCTIONS in emcc compilation options
+	// to make it callable in JS side.
+	printf(">>>>>>>>>>>>>>>>>clean_stuff called\n");
 }

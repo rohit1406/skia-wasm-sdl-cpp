@@ -15,6 +15,11 @@
 
 #include <iostream>
 #include <cassert>
+#include <list>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "SDL.h"
 
@@ -27,7 +32,7 @@
 #include "include/core/SkFont.h"
 #include "include/core/SkSurface.h"
 #include "include/utils/SkRandom.h"
-
+#include "include/core/SkTextBlob.h"
 #include "src/gpu/gl/GrGLUtil.h"
 
 #if defined(SK_BUILD_FOR_WASM)

@@ -1,0 +1,77 @@
+{
+	"elements": [
+		{
+			"type": "RECTANGLE",
+			"props": {
+				"x": 25,
+				"y": 100,
+				"width": 200,
+				"height": 200
+			},
+			"fillColor": "none",
+			"strokeColor": "black",
+			"strokeWidth": 2,
+			"gradient": {
+				"colors": [ "#9B0F02", "#FFFFFF" ],
+				"offsets": [ "30%", "90%" ],
+				"angle": -1,
+				"direction": "",
+				"type": "linear"
+			}
+		},
+		{
+			"type": "RECTANGLE",
+			"props": {
+				"x": 200,
+				"y": 200,
+				"width": 200,
+				"height": 200
+			},
+			"fillColor": "none",
+			"strokeColor": "black",
+			"strokeWidth": 2,
+			"gradient": {
+				"colors": [ "#9B0F02", "#FFFFFF" ],
+				"offsets": [ "30%", "90%" ],
+				"angle": -1,
+				"direction": "",
+				"type": "linear"
+			}
+		},
+		{
+			"type": "RECTANGLE",
+			"props": {
+				"x": 150,
+				"y": 150,
+				"width": 200,
+				"height": 200
+			},
+			"fillColor": "none",
+			"strokeColor": "black",
+			"strokeWidth": 2,
+			"gradient": {
+				"colors": [ "#9B0F02", "#FFFFFF" ],
+				"offsets": [ "30%", "90%" ],
+				"angle": -1,
+				"direction": "",
+				"type": "linear"
+			}
+		},
+		{
+			"type": "TEXT",
+			"props": {
+				"x": 25,
+				"y": 25
+			},
+			"value": "World is beautiful!",
+			"fontSize": 25,
+			"fillColor": "#ff00ff",
+			"strokeColor": "none",
+			"strokeWidth": 0,
+			"gradient": null,
+			"letterSpacing": 1,
+			"fontFamily": "Lato",
+			"fontWeight": "Bold"
+		}
+	]
+}

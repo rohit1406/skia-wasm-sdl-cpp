@@ -27,7 +27,7 @@ else
   # RELEASE_CONF="-Oz --closure 1 -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0"
 
   # HACK: Faster builds with -O0
-  RELEASE_CONF="-O0 -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0"
+  RELEASE_CONF="-O0 --js-opts 0 -DSK_RELEASE -DGR_GL_CHECK_ALLOC_WITH_GET_ERROR=0"
   EXTERNALS_FOLDER=/externals/release
   BUILD_DIR=${BUILD_DIR:="out/release"}
 fi
@@ -67,7 +67,7 @@ WASM_GPU="-lEGL -lGLESv2 -DSK_SUPPORT_GPU=1 -DSK_GL -DSK_DISABLE_LEGACY_SHADERCO
 # NOTE: Had to set ERROR_ON_UNDEFINED_SYMBOLS to 0, to workaround linker errors :(
 #
 # SK_BUILD_FOR_WASM is our own symbol, nothing to do with Skia.
-${EMCC} \
+${EMCXX} \
     -I . \
     -I ~/skia/include/core \
     -I ~/skia/include/effects \
@@ -82,6 +82,9 @@ ${EMCC} \
     -s INITIAL_MEMORY=128MB \
     -s WARN_UNALIGNED=1 \
     -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
+	-s EXPORTED_FUNCTIONS=['_int_sqrt','_main'] \
+	-s EXPORTED_RUNTIME_METHODS=['ccall','cwrap'] \
+	--preload-file assets \
     -DSK_BUILD_FOR_WASM \
     ${WASM_GPU} \
     ${RELEASE_CONF} \
